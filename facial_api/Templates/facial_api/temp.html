@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+  <form action="" id="form" enctype="multipart/form-data" method="post">
+    <input type="file" name="file" id="imageInput" accept="image/*">
+    <button type="submit">Upload</button>
+  </form>
+  <ul id="imageList"></ul>
+</body>
+  <script>
+  $("#form").submit(function(e){
+    e.preventDefault()
+    const imageInput = document.querySelector('#imageInput') 
+    const imageList = document.querySelector('#imageList') 
+    createImage()
+  })
+    
+const createImage = async() =>{
+  let image = imageInput.files[0];
+  let formData = new FormData();
+  formData.append("target_image_path", image);
+  
+  let newImage = fetch("http://192.168.1.42:1550/TargetData/",{
+    method : "POST",
+    body : formData,
+    headers: {
+      'X-CSRFToken': "Nf03uJeookeS21mfmMkK2NuYM4GoMTkN"  // Include the CSRF token in the headers
+    }
+  }).then(response=>response.json()).catch(error=>console.error(error))
+  //console.log(image)
+}
+  </script>
+</html>
